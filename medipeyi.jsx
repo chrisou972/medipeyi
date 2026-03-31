@@ -12,6 +12,7 @@ const OFFICIAL_SOURCES = {
   arsUrl: "https://www.martinique.ars.sante.fr",
   addressApiUrl: "https://api-adresse.data.gouv.fr",
   chuUrl: "https://www.chu-martinique.fr/en/urgent-admission/",
+  pharmadininaUrl: "https://www.pharmadinina.com/",
 };
 
 const INTERNAL_ENDPOINTS = {
@@ -129,6 +130,7 @@ const MARTINIQUE_COMMUNES = [
 
 const CATEGORIES = [
   { id: "pharmacie", label: "Pharmacies", icon: "✚", color: "#007c78" },
+  { id: "parapharmacie", label: "Para-pharmacies", icon: "✿", color: "#4f8f5b" },
   { id: "medecin", label: "Médecins", icon: "◉", color: "#1e98c7" },
   { id: "dentiste", label: "Dentistes", icon: "◌", color: "#a167f6" },
   { id: "kine", label: "Kinés", icon: "≋", color: "#f58539" },
@@ -579,6 +581,129 @@ const FEATURED_PHARMACY_HINTS = [
   { fragments: ["union", "sainte marie"], seedId: "stm-union" },
 ];
 
+const VERIFIED_PARAPHARMACIES = [
+  {
+    id: "para-aeroport",
+    name: "Pharmacie de l'Aéroport",
+    specialty: "Para-pharmacie",
+    address: "Aéroport Aimé Césaire, 97232 Le Lamentin",
+    city: "Le Lamentin",
+    postcode: "97232",
+    zone: "aeroport",
+    phone: "05 96 42 17 64",
+    phoneRaw: "0596421764",
+    category: "parapharmacie",
+    acceptsVitale: false,
+    apcv: false,
+    sector: "",
+    source: "Site de l'officine + URPS Martinique",
+    sourceUrl: "https://www.pharmaciedelaeroport-lelamentin.fr/contact",
+    sourceUpdatedAt: "2026-03-31",
+    lat: 14.617358,
+    lng: -60.997551,
+    featured: true,
+    verified: true,
+    badge: "Offre parapharmacie",
+    note: "Parapharmacie signalée sur le site de l'officine.",
+  },
+  {
+    id: "para-antonio",
+    name: "Pharmacie Antonio",
+    specialty: "Para-pharmacie",
+    address: "Rue Ernest André, 97232 Le Lamentin",
+    city: "Le Lamentin",
+    postcode: "97232",
+    zone: "aeroport",
+    phone: "05 96 51 13 88",
+    phoneRaw: "0596511388",
+    category: "parapharmacie",
+    acceptsVitale: false,
+    apcv: false,
+    sector: "",
+    source: "Site de l'officine + URPS Martinique",
+    sourceUrl: "https://www.pharmacie-antonio.com/",
+    sourceUpdatedAt: "2026-03-31",
+    lat: 14.616441,
+    lng: -60.997687,
+    featured: true,
+    verified: true,
+    badge: "Offre parapharmacie",
+    note: "Produits parapharmaceutiques mis en avant sur le site de l'officine.",
+  },
+  {
+    id: "para-grand-village",
+    name: "Pharmacie de Grand Village",
+    specialty: "Para-pharmacie",
+    address: "Grand Village Terreville, 97233 Schœlcher",
+    city: "Schœlcher",
+    postcode: "97233",
+    zone: "centre",
+    phone: "05 96 52 00 68",
+    phoneRaw: "0596520068",
+    category: "parapharmacie",
+    acceptsVitale: false,
+    apcv: false,
+    sector: "",
+    source: "Annuaire local vérifié",
+    sourceUrl: "https://www.pharmadinina.com/pharmacie/grand-village-de/",
+    sourceUpdatedAt: "2026-03-31",
+    lat: 14.6291809,
+    lng: -61.1025955,
+    featured: true,
+    verified: true,
+    badge: "Offre parapharmacie",
+    note: "Officine recensée avec espace parapharmacie sur l'annuaire local.",
+  },
+  {
+    id: "para-bellevue",
+    name: "Nouvelle Pharmacie de Bellevue",
+    specialty: "Para-pharmacie",
+    address: "Centre commercial de Bellevue, 97200 Fort-de-France",
+    city: "Fort-de-France",
+    postcode: "97200",
+    zone: "centre",
+    phone: "05 96 61 42 19",
+    phoneRaw: "0596614219",
+    category: "parapharmacie",
+    acceptsVitale: false,
+    apcv: false,
+    sector: "",
+    source: "Site de l'officine",
+    sourceUrl: "https://www.pharmaciebellevue-fdf.fr/",
+    sourceUpdatedAt: "2026-03-31",
+    lat: 14.601381,
+    lng: -61.080737,
+    featured: true,
+    verified: true,
+    badge: "Offre parapharmacie",
+    note: "Parapharmacie en ligne et promotions para affichées sur le site.",
+  },
+  {
+    id: "para-source",
+    name: "Pharmacie de la Source",
+    specialty: "Para-pharmacie",
+    address: "Centre commercial La Source, rue Victor Schoelcher, 97224 Ducos",
+    city: "Ducos",
+    postcode: "97224",
+    zone: "centre",
+    phone: "05 96 56 14 33",
+    phoneRaw: "0596561433",
+    category: "parapharmacie",
+    acceptsVitale: false,
+    apcv: false,
+    sector: "",
+    source: "Site de l'officine",
+    sourceUrl: "https://pharmaciedelasource.mesoigner.fr/",
+    sourceUpdatedAt: "2026-03-31",
+    lat: 14.576986,
+    lng: -60.973023,
+    featured: true,
+    verified: true,
+    badge: "Offre parapharmacie",
+    note: "Catalogue médicaments et parapharmacie accessible depuis le site.",
+  },
+];
+
 const HOSPITALS = [
   {
     id: "chu-martinique",
@@ -600,6 +725,27 @@ const HOSPITALS = [
     verified: true,
     badge: "Urgences confirmées",
     note: "Source officielle CHU: standard + urgences adultes et pédiatriques.",
+  },
+  {
+    id: "mfme",
+    name: "MFME - Maison de la Femme, de la Mère et de l'Enfant",
+    specialty: "Maternité niveau 3 / mère-enfant",
+    address: "Ancienne route de Lamentin, 97200 Fort-de-France",
+    city: "Fort-de-France",
+    postcode: "97200",
+    zone: "centre",
+    phone: "05 96 55 69 68",
+    phoneRaw: "0596556968",
+    lat: 14.630275,
+    lng: -61.03769,
+    category: "hopital",
+    source: "CHU Martinique",
+    sourceUrl: OFFICIAL_SOURCES.chuUrl,
+    sourceUpdatedAt: "2026-03-31",
+    featured: true,
+    verified: true,
+    badge: "Mère-enfant",
+    note: "MFME du CHU Martinique: maternité de niveau 3 et prise en charge mère-enfant.",
   },
   {
     id: "sos-medecins",
@@ -1055,6 +1201,7 @@ function mapCdsRecord(row) {
 
 async function fetchCategoryRecords(categoryId, signal) {
   if (categoryId === "hopital") return HOSPITALS;
+  if (categoryId === "parapharmacie") return VERIFIED_PARAPHARMACIES;
   const config = CATEGORY_CONFIG[categoryId];
   if (!config) return [];
 
@@ -1089,6 +1236,9 @@ async function fetchTotals(signal) {
     CATEGORIES.map(async (category) => {
       if (category.id === "hopital") {
         return [category.id, HOSPITALS.length];
+      }
+      if (category.id === "parapharmacie") {
+        return [category.id, VERIFIED_PARAPHARMACIES.length];
       }
       const config = CATEGORY_CONFIG[category.id];
       const resourceId =
@@ -1390,7 +1540,9 @@ export default function MediPeyi() {
   const filteredRecords = useMemo(() => {
     const needle = normalizeText(query);
     const shouldSortByPopulation =
-      category === "pharmacie" && zone === "all" && commune === "all";
+      (category === "pharmacie" || category === "parapharmacie") &&
+      zone === "all" &&
+      commune === "all";
 
     return [...activeRecords]
       .filter((record) => zone === "all" || record.zone === zone)
@@ -2015,8 +2167,10 @@ export default function MediPeyi() {
                 <div className="mp-category-card" style={{ cursor: "default" }}>
                   <div className="mp-kicker">Repère utile</div>
                   <p>
-                    {category === "pharmacie" && zone === "all" && commune === "all"
-                      ? "En vue Martinique entière, les pharmacies sont triées par population communale, du plus grand bassin au plus petit."
+                    {(category === "pharmacie" || category === "parapharmacie") &&
+                    zone === "all" &&
+                    commune === "all"
+                      ? "En vue Martinique entière, cette liste est triée par population communale, du plus grand bassin au plus petit."
                       : `${activeCoveredCommunes} communes visibles dans cette vue. Pour une garde, on ouvre d'abord 3237.`}
                   </p>
                 </div>
@@ -2039,6 +2193,15 @@ export default function MediPeyi() {
                   >
                     {ICONS.ext}
                     Voir la garde
+                  </button>
+                ) : category === "parapharmacie" ? (
+                  <button
+                    type="button"
+                    className="mp-ghost-btn"
+                    onClick={() => openExternal(OFFICIAL_SOURCES.pharmadininaUrl)}
+                  >
+                    {ICONS.ext}
+                    Sources locales
                   </button>
                 ) : (
                   <button
