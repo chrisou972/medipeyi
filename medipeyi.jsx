@@ -331,6 +331,43 @@ const CITY_ALIAS_TO_COMMUNE = {
   "LE VAUCLIN": "Le Vauclin",
 };
 
+const COMMUNE_POPULATION_2023 = {
+  "Ajoupa-Bouillon": 1682,
+  "Les Anses-d'Arlet": 3912,
+  "Basse-Pointe": 2852,
+  Bellefontaine: 1746,
+  "Le Carbet": 3721,
+  "Case-Pilote": 4537,
+  Ducos: 18105,
+  "Fonds-Saint-Denis": 640,
+  "Fort-de-France": 75506,
+  "Le Diamant": 6161,
+  "Le François": 15778,
+  "Grand'Rivière": 487,
+  "Gros-Morne": 9610,
+  "Le Lamentin": 39400,
+  "Le Lorrain": 6566,
+  "Le Marigot": 2948,
+  "Le Marin": 8486,
+  "Le Morne-Rouge": 4388,
+  "Le Morne-Vert": 1718,
+  Macouba: 987,
+  "Le Prêcheur": 1479,
+  "Le Robert": 21553,
+  "Rivière-Pilote": 11604,
+  "Rivière-Salée": 11829,
+  "Saint-Esprit": 10322,
+  "Saint-Joseph": 16258,
+  "Saint-Pierre": 3961,
+  "Sainte-Anne": 4306,
+  "Sainte-Luce": 9410,
+  "Sainte-Marie": 14756,
+  "Schœlcher": 19478,
+  "La Trinité": 11454,
+  "Les Trois-Îlets": 6507,
+  "Le Vauclin": 8483,
+};
+
 const VERIFIED_STE_MARIE_PHARMACIES = [
   {
     id: "stm-ocean",
@@ -883,6 +920,11 @@ function zoneFromCity(city = "") {
   return CITY_ZONE_MAP[spaced] || "all";
 }
 
+function populationForCommune(city = "") {
+  const commune = canonicalCommune(city);
+  return COMMUNE_POPULATION_2023[commune] || 0;
+}
+
 function distanceKm(a, b) {
   if (!a?.lat || !a?.lng || !b?.lat || !b?.lng) return null;
   const rad = (value) => (value * Math.PI) / 180;
@@ -1347,6 +1389,9 @@ export default function MediPeyi() {
 
   const filteredRecords = useMemo(() => {
     const needle = normalizeText(query);
+    const shouldSortByPopulation =
+      category === "pharmacie" && zone === "all" && commune === "all";
+
     return [...activeRecords]
       .filter((record) => zone === "all" || record.zone === zone)
       .filter(
@@ -1368,6 +1413,12 @@ export default function MediPeyi() {
           if (aScore !== bScore) return bScore - aScore;
         }
 
+        if (shouldSortByPopulation) {
+          const aPopulation = populationForCommune(a.city);
+          const bPopulation = populationForCommune(b.city);
+          if (aPopulation !== bPopulation) return bPopulation - aPopulation;
+        }
+
         if (a.featured !== b.featured) return a.featured ? -1 : 1;
 
         const aGeo = getProviderGeo(a, geocodeCache);
@@ -1379,7 +1430,7 @@ export default function MediPeyi() {
         }
         return a.name.localeCompare(b.name, "fr");
       });
-  }, [activeRecords, commune, geocodeCache, location, priorityMode, query, zone]);
+  }, [activeRecords, category, commune, geocodeCache, location, priorityMode, query, zone]);
 
   const spotlightRecords = useMemo(
     () => filteredRecords.filter((record) => record.featured).slice(0, category === "pharmacie" ? 6 : 4),
@@ -1964,7 +2015,9 @@ export default function MediPeyi() {
                 <div className="mp-category-card" style={{ cursor: "default" }}>
                   <div className="mp-kicker">Repère utile</div>
                   <p>
-                    {activeCoveredCommunes} communes visibles dans cette vue. Pour une garde, on ouvre d'abord 3237.
+                    {category === "pharmacie" && zone === "all" && commune === "all"
+                      ? "En vue Martinique entière, les pharmacies sont triées par population communale, du plus grand bassin au plus petit."
+                      : `${activeCoveredCommunes} communes visibles dans cette vue. Pour une garde, on ouvre d'abord 3237.`}
                   </p>
                 </div>
               </div>
