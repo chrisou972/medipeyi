@@ -1,0 +1,19 @@
+{
+  "name": "MediPeyi",
+  "short_name": "MediPeyi",
+  "description": "Plateforme santé de proximité pour la Martinique.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff8dd",
+  "theme_color": "#168a55",
+  "lang": "fr-FR",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
