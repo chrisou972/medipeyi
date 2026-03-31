@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "medipeyi",
+  "compatibility_date": "2026-03-30",
+  "assets": {
+    "directory": "./dist"
+  }
+}
