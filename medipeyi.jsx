@@ -14,6 +14,11 @@ const OFFICIAL_SOURCES = {
   chuUrl: "https://www.chu-martinique.fr/en/urgent-admission/",
 };
 
+const INTERNAL_ENDPOINTS = {
+  tabularBase: "/api/tabular",
+  addressBase: "/api/address",
+};
+
 const PS_RESOURCE_ID = "432983b9-2e6f-473a-b35a-20403c300a5f";
 const CDS_RESOURCE_ID = "767470ac-dcf9-4110-97b6-cb2be3b59ba2";
 const MARTINIQUE_FILTERS = {
@@ -893,7 +898,7 @@ function distanceKm(a, b) {
 
 function buildTabularUrl(resourceId, params = {}) {
   const search = new URLSearchParams(params);
-  return `https://tabular-api.data.gouv.fr/api/resources/${resourceId}/data/?${search.toString()}`;
+  return `${INTERNAL_ENDPOINTS.tabularBase}/resources/${resourceId}/data/?${search.toString()}`;
 }
 
 function seedById(seedId) {
@@ -1252,7 +1257,7 @@ export default function MediPeyi() {
     const lookup = async () => {
       try {
         const q = encodeURIComponent(`${selected.address} ${selected.city || ""} Martinique`);
-        const response = await fetch(`${OFFICIAL_SOURCES.addressApiUrl}/search/?q=${q}&limit=1`, {
+        const response = await fetch(`${INTERNAL_ENDPOINTS.addressBase}/search/?q=${q}&limit=1`, {
           signal: controller.signal,
         });
         if (!response.ok) return;
@@ -1383,7 +1388,7 @@ export default function MediPeyi() {
 
   const visibleCount =
     category === "pharmacie" && !directoryByCategory.pharmacie?.length
-      ? `${featuredPharmacies.length} officines mises en avant`
+      ? `${fallbackPharmacies.length} officines mises en avant`
       : `${filteredRecords.length} résultat${filteredRecords.length > 1 ? "s" : ""}`;
 
   const sourceDate = new Intl.DateTimeFormat("fr-FR", { dateStyle: "long" }).format(
