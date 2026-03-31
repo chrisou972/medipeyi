@@ -444,6 +444,90 @@ const VERIFIED_STE_MARIE_PHARMACIES = [
   },
 ];
 
+const VERIFIED_LAMENTIN_FALLBACK_PHARMACIES = [
+  {
+    id: "lam-aeroport",
+    name: "Pharmacie de l'Aeroport",
+    specialty: "Pharmacien",
+    address: "Aeroport du Lamentin, 97232 Le Lamentin",
+    city: "Le Lamentin",
+    postcode: "97232",
+    zone: "aeroport",
+    phone: "05 96 42 17 64",
+    phoneRaw: "0596421764",
+    lat: 14.617358,
+    lng: -60.997551,
+    category: "pharmacie",
+    source: OFFICIAL_SOURCES.ameliLabel,
+    sourceUrl: OFFICIAL_SOURCES.ameliUrl,
+    sourceUpdatedAt: OFFICIAL_SOURCES.ameliUpdatedAt,
+    featured: true,
+    verified: true,
+    badge: "Secours aéroport",
+    note: "Fallback officiel prioritaire si la synchro pharmacie échoue.",
+  },
+  {
+    id: "lam-place-armes",
+    name: "Pharmacie de Place d'Armes",
+    specialty: "Pharmacien",
+    address: "Centre commercial Place d'Armes, 97232 Le Lamentin",
+    city: "Le Lamentin",
+    postcode: "97232",
+    zone: "aeroport",
+    phone: "05 96 51 01 42",
+    phoneRaw: "0596510142",
+    lat: 14.612841,
+    lng: -60.984937,
+    category: "pharmacie",
+    source: OFFICIAL_SOURCES.ameliLabel,
+    sourceUrl: OFFICIAL_SOURCES.ameliUrl,
+    sourceUpdatedAt: OFFICIAL_SOURCES.ameliUpdatedAt,
+    featured: true,
+    verified: true,
+    badge: "Secours Lamentin",
+  },
+  {
+    id: "lam-galleria",
+    name: "Pharmacie La Galleria",
+    specialty: "Pharmacien",
+    address: "Centre commercial La Galleria, Acajou, 97232 Le Lamentin",
+    city: "Le Lamentin",
+    postcode: "97232",
+    zone: "aeroport",
+    phone: "05 96 50 69 23",
+    phoneRaw: "0596506923",
+    lat: 14.619393,
+    lng: -61.020694,
+    category: "pharmacie",
+    source: OFFICIAL_SOURCES.ameliLabel,
+    sourceUrl: OFFICIAL_SOURCES.ameliUrl,
+    sourceUpdatedAt: OFFICIAL_SOURCES.ameliUpdatedAt,
+    featured: true,
+    verified: true,
+    badge: "Secours Lamentin",
+  },
+  {
+    id: "lam-monan-zamy",
+    name: "Pharmacie Monan-Zamy",
+    specialty: "Pharmacien",
+    address: "Centre medical, Plaine Petit Manoir, 97232 Le Lamentin",
+    city: "Le Lamentin",
+    postcode: "97232",
+    zone: "aeroport",
+    phone: "05 96 51 23 15",
+    phoneRaw: "0596512315",
+    lat: 14.614186,
+    lng: -60.99608,
+    category: "pharmacie",
+    source: OFFICIAL_SOURCES.ameliLabel,
+    sourceUrl: OFFICIAL_SOURCES.ameliUrl,
+    sourceUpdatedAt: OFFICIAL_SOURCES.ameliUpdatedAt,
+    featured: true,
+    verified: true,
+    badge: "Secours Lamentin",
+  },
+];
+
 const FEATURED_PHARMACY_HINTS = [
   { fragments: ["ocean", "sainte marie"], seedId: "stm-ocean" },
   { fragments: ["tombolo", "sainte marie"], seedId: "stm-tombolo" },
@@ -1122,7 +1206,7 @@ export default function MediPeyi() {
       } catch (err) {
         if (!active || err.name === "AbortError") return;
         setError(
-          "Le flux officiel n'a pas pu être synchronisé. Les pharmacies vérifiées de Sainte-Marie restent visibles en secours."
+          "Le flux officiel n'a pas pu être synchronisé. Les pharmacies de secours du Lamentin et de l'aeroport restent visibles."
         );
       } finally {
         if (active) {
@@ -1193,22 +1277,22 @@ export default function MediPeyi() {
     return () => controller.abort();
   }, [geocodeCache, selected, setGeocodeCache]);
 
-  const featuredPharmacies = VERIFIED_STE_MARIE_PHARMACIES.map((provider) => {
+  const fallbackPharmacies = VERIFIED_LAMENTIN_FALLBACK_PHARMACIES.map((provider) => {
     const geo = getProviderGeo(provider, geocodeCache);
     return geo ? { ...provider, lat: geo.lat, lng: geo.lng } : provider;
   });
 
   const pharmacyRecords = useMemo(() => {
     if (directoryByCategory.pharmacie?.length) return directoryByCategory.pharmacie;
-    return featuredPharmacies;
-  }, [directoryByCategory.pharmacie, featuredPharmacies]);
+    return fallbackPharmacies;
+  }, [directoryByCategory.pharmacie, fallbackPharmacies]);
 
   const activeRecords = useMemo(() => {
     if (category === "hopital") return HOSPITALS;
     if (directoryByCategory[category]?.length) return directoryByCategory[category];
-    if (category === "pharmacie") return featuredPharmacies;
+    if (category === "pharmacie") return fallbackPharmacies;
     return [];
-  }, [category, directoryByCategory, featuredPharmacies]);
+  }, [category, directoryByCategory, fallbackPharmacies]);
 
   const activeCountByCommune = useMemo(() => {
     return activeRecords.reduce((acc, record) => {
